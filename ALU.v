@@ -1,0 +1,23 @@
+module ALU(
+	input [31:0] InA,
+	input [31:0] InB,
+	input [1:0] Op,	// 00 Add, 01 Sub, 10 Mul, 11 Div
+	output [31:0] Out
+	);
+	
+	wire [31:0] TempA, TempB;
+	wire [31:0] TempOut;
+	
+	wire [31:0] TempAdd, TempSub, TempMul, TempDiv;
+	
+	assign TempA = InA;
+	assign TempB = InB;
+	
+	Add_Sub add(TempA,TempB,1'b0,TempAdd);
+	Add_Sub sub(TempA,TempB,1'b1,TempSub);
+	Mul mul(TempA,TempB,TempMul);
+	Div div(TempA,TempB,TempDiv);
+	
+	assign Out = Op[1] ? (Op[0] ? TempDiv : TempMul) : (Op[0] ? TempSub : TempAdd);
+	
+endmodule
